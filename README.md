@@ -17,9 +17,8 @@ Step 6 → Creation of deployment and service for EKS
 
 ### $\color{red} \textbf {Step 1 → Login  and  basics  setup}$
 1. Click on launch Instance
-   ![instance](https://github.com/abhipraydhoble/Project-Super-Mario/assets/122669982/5fe51373-eaac-4f7c-9669-34c578277051)
+  ![instance](./.Images/navigate_to_ins_create.png)
 2. Connect to EC2-Instance
-   ![connect-ec2](https://github.com/abhipraydhoble/Project-Super-Mario/assets/122669982/9d518e77-6f65-4153-acfc-790a6eaf669a)
 
    
 5. Attach role to ec2 instance
@@ -90,23 +89,20 @@ kubectl version --client
 ````
 ### $\color{red} \textbf {Step 3 → IAM  Role  for  EC2}$
 create role:
-![role](https://github.com/abhipraydhoble/Project-Super-Mario/assets/122669982/31a05c18-f34b-430d-b5cb-c5873ae6e9c5)
+![role](./.Images/IAM_Role_1.png)
 
 ### $\color{red} \textbf {Step 4 →Attach  IAM  role  with your  EC2 }$
 go to EC2 
 click on actions → security → modify IAM role option
 - administrator access
 - eks
-![image](https://github.com/user-attachments/assets/c23f9d00-505d-4a0d-b07d-c6b21d419748)
-
-![role-ec2](https://github.com/abhipraydhoble/Project-Super-Mario/assets/122669982/70cc0ebb-6063-4c4b-98df-7259a08749b8)
-
-![modify-role](https://github.com/abhipraydhoble/Project-Super-Mario/assets/122669982/3e998e21-3654-43b0-8df0-496f009ef0a6)
-
+![image](./.Images/IAM_Role_Policies.png)
+![role-ec2](./.Images/Modify_IAM_Role.png)
+![modify-role](./.Images/Modify_IAM_Role2.png)
 ### $\color{red} \textbf {Step 5 → Building Infrastructure  Using  terraform}$
 $\color{blue} \textbf {Install  GIT}$
 ````
-git clone https://github.com/abhipraydhoble/Project-Super-Mario.git
+https://github.com/mukundDeo9325/Project-Super-Mario.git
 ````
 ````
 cd Project-Super-Mario
@@ -115,7 +111,7 @@ cd EKS-TF
 ````
 vim backend.tf
 ````
-![backend tf](https://github.com/abhipraydhoble/Project-Super-Mario/assets/122669982/6b9e648f-2f13-41e8-a66b-6b6e6e0a63de)
+![backend tf](./.Images/change_region_backend_file.png)
 
 $\color{blue} \textbf {Create \ Infra:}$
 ````
@@ -125,7 +121,7 @@ terraform apply --auto-approve
 ````
 
 ````
-aws eks update-kubeconfig --name EKS_CLOUD --region ap-southeast-1 --profile eks
+aws eks update-kubeconfig --name EKS_CLOUD --region ap-south-1 --profile eks
 ````
 
 ### $\color{red} \textbf {Step 6 → Creation  of  deployment  and service  for  EKS}$
@@ -145,13 +141,13 @@ kubectl get svc mario-service
 ````
 copy the load balancer ingress and paste it on browser and your game is running
 
-![load balancer](https://github.com/abhipraydhoble/Project-Super-Mario/assets/122669982/d085951d-3398-44ad-b9cd-05c561b74664)
+![load balancer](./.Images/kubectl_get_svc.png)
 
 
 
 $\color{green} \textbf {Final Output: Enjoy The Game 🎮}$
 
-![output](https://github.com/abhipraydhoble/Project-Super-Mario/assets/122669982/edfff0b5-6507-48e4-b552-908671b59920)
+![output](./.Images/demo_image_final.png)
 
 **Delete Infra**
 ````
