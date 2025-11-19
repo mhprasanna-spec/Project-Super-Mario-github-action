@@ -149,6 +149,10 @@ $\color{green} \textbf {Final Output: Enjoy The Game 🎮}$
 
 ![output](./.Images/demo_image_final.png)
 
+navigate to EKS-TF dir to delete infra 
+```bash
+cd EKS-TF
+```
 **Delete Infra**
 ````
  terraform destroy -auto-approve
