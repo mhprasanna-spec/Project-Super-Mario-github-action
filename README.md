@@ -112,7 +112,8 @@ crreate workflow
 
 ## Write main.yaml file 
 <img width="1459" height="384" alt="Screenshot 2025-11-26 at 4 58 02 PM" src="https://github.com/user-attachments/assets/0e5e0598-969d-4ec6-8946-d7bc10efcc87" />
-[main.yaml](./.github/workflows/main.yml)
+
+.github/workflows/main.yml
 
 check for the code is running in github_action -->main.yaml 
 <img width="900" height="87" alt="Screenshot 2025-11-26 at 5 00 35 PM" src="https://github.com/user-attachments/assets/5d03f9fe-96cc-44c5-9d96-6dfc4704fff2" />
