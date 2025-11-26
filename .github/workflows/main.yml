@@ -1,3 +1,55 @@
+name: Infra CI/CD – Project-Super-Mario
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+
+jobs:
+  terraform:
+    name: Terraform plan & apply
+    runs-on: ubuntu-latest
+    env:
+      AWS_DEFAULT_REGION: ap-south-1
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: '1.6.0'
+
+      - name: Terraform Init
+        working-directory: ./EKS-TF
+        run: terraform init
+
+      - name: Terraform Validate
+        working-directory: ./EKS-TF
+        run: terraform validate
+
+      - name: Terraform Plan
+        working-directory: ./EKS-TF
+        run: terraform plan -out=tfplan
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        working-directory: ./EKS-TF
+        run: terraform apply -auto-approve
+
+
   deploy_k8s:
     name: Deploy to EKS using kubectl
     runs-on: ubuntu-latest
@@ -7,10 +59,11 @@
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # ✅ Install AWS CLI
+      # ✅ Install AWS CLI (needed for EKS auth)
       - name: Install AWS CLI
         uses: aws-actions/setup-sam@v2
 
+      # ✅ Configure AWS for kubectl exec plugin
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -23,18 +76,18 @@
         with:
           version: 'latest'
 
-      # ✅ Write kubeconfig correctly
+      # ✅ Create kubeconfig correctly
       - name: Create kubeconfig file
         run: |
           mkdir -p $HOME/.kube
           echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
           chmod 600 $HOME/.kube/config
 
-      # ✅ Test connectivity (THIS IS THE KEY FIX)
+      # ✅ Verify cluster connectivity
       - name: Verify EKS access
         run: kubectl get nodes
 
-      # ✅ Deploy
+      # ✅ Deploy app
       - name: Apply Kubernetes manifests
         run: |
           kubectl apply -f deployment.yaml
