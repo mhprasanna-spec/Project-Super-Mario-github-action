@@ -9,9 +9,8 @@ Step 3 → IAM Role for EC2
 
 Step 4 →Attach IAM role with your EC2
 
-Step 5 → Building Infrastructure Using terraform
+Step 5 → Building run github action workflow on main.yaml
 
-Step 6 → Creation of deployment and service for EKS
 
 
 
@@ -99,62 +98,36 @@ click on actions → security → modify IAM role option
 ![image](./.Images/IAM_Role_Policies.png)
 ![role-ec2](./.Images/Modify_IAM_Role.png)
 ![modify-role](./.Images/Modify_IAM_Role2.png)
-### $\color{red} \textbf {Step 5 → Building Infrastructure  Using  terraform}$
-$\color{blue} \textbf {Install  GIT}$
-````
-git clone https://github.com/mukundDeo9325/Project-Super-Mario.git
-````
-````
-cd Project-Super-Mario
-cd EKS-TF
-````
-````
-vim backend.tf
-````
-![backend tf](./.Images/change_region_backend_file.png)
+### $\color{red} \textbf {Step 5 → Building Infrastructure github action workflow on main.yaml
 
-$\color{blue} \textbf {Create \ Infra:}$
-````
-terraform init
-terraform plan
-terraform apply --auto-approve
-````
 
-````
-aws eks update-kubeconfig --name EKS_CLOUD --region ap-south-1 --profile eks
-````
+## navigate to github action 
+crreate workflow 
+<img width="1094" height="197" alt="Screenshot 2025-11-26 at 4 56 34 PM" src="https://github.com/user-attachments/assets/529af49a-72e6-4c4c-a789-bcdc82dade0e" />
 
-### $\color{red} \textbf {Step 6 → Creation  of  deployment  and service  for  EKS}$
-change the directory where deployment and service files are stored use the command →
-````
-cd ..
-````
-$\color{blue} \textbf {create  the  deployment}$
-````
-kubectl apply -f deployment.yaml
-````
-$\color{blue} \textbf {Now create  the service}$
-````
-kubectl apply -f service.yaml
-kubectl get all
-kubectl get svc mario-service
-````
-copy the load balancer ingress and paste it on browser and your game is running
 
-![load balancer](./.Images/kubectl_get_svc.png)
+## chose workflow and create 
+<img width="1124" height="144" alt="Screenshot 2025-11-26 at 4 57 18 PM" src="https://github.com/user-attachments/assets/1594c66f-b8b3-4494-b5f5-92d9424c38bf" />
+
+
+## Write main.yaml file 
+<img width="1459" height="384" alt="Screenshot 2025-11-26 at 4 58 02 PM" src="https://github.com/user-attachments/assets/0e5e0598-969d-4ec6-8946-d7bc10efcc87" />
+[main.yaml](./.github/workflows/main.yml)
+
+check for the code is running in github_action -->main.yaml 
+<img width="900" height="87" alt="Screenshot 2025-11-26 at 5 00 35 PM" src="https://github.com/user-attachments/assets/5d03f9fe-96cc-44c5-9d96-6dfc4704fff2" />
+
+
+## to destroy the workflow 
+write destroy workflow file 
+<img width="906" height="88" alt="Screenshot 2025-11-26 at 5 02 07 PM" src="https://github.com/user-attachments/assets/38eaee21-1c5c-4774-884a-bbf4bc5936fc" />
 
 
 
-$\color{green} \textbf {Final Output: Enjoy The Game 🎮}$
 
-![output](./.Images/demo_image_final.png)
 
-navigate to EKS-TF dir to delete infra 
-```bash
-cd EKS-TF
-```
-**Delete Infra**
-````
- terraform destroy -auto-approve
-````
+
+
+
+
 
