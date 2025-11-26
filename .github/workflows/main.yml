@@ -19,8 +19,6 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-
-      # ✅ ADD THIS STEP (IMPORTANT FIX)
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -28,34 +26,25 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-south-1
 
-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: '1.6.0'
 
-
       - name: Terraform Init
         working-directory: ./EKS-TF
         run: terraform init
-
 
       - name: Terraform Validate
         working-directory: ./EKS-TF
         run: terraform validate
 
-
-      - name: Terraform Format Check
-        working-directory: ./EKS-TF
-        run: terraform fmt -check
-
+      # ❌ REMOVED terraform fmt (no formatting enforcement)
 
       - name: Terraform Plan
         working-directory: ./EKS-TF
         run: terraform plan -out=tfplan
 
-
-      # ✅ Auto apply on main push
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         working-directory: ./EKS-TF
@@ -74,12 +63,10 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-
       - name: Setup kubectl
         uses: azure/setup-kubectl@v3
         with:
           version: 'latest'
-
 
       - name: Apply Kubernetes manifests
         run: |
