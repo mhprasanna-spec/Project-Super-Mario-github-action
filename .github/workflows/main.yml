@@ -1,23 +1,15 @@
-name: Infra CI/CD – Project-Super-Mario
-
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-
-jobs:
-  terraform:
-    name: Terraform plan & apply
+  deploy_k8s:
+    name: Deploy to EKS using kubectl
     runs-on: ubuntu-latest
-    env:
-      AWS_DEFAULT_REGION: ap-south-1
+    needs: terraform
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+
+      # ✅ Install AWS CLI
+      - name: Install AWS CLI
+        uses: aws-actions/setup-sam@v2
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -26,48 +18,23 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-south-1
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: '1.6.0'
-
-      - name: Terraform Init
-        working-directory: ./EKS-TF
-        run: terraform init
-
-      - name: Terraform Validate
-        working-directory: ./EKS-TF
-        run: terraform validate
-
-      # ❌ REMOVED terraform fmt (no formatting enforcement)
-
-      - name: Terraform Plan
-        working-directory: ./EKS-TF
-        run: terraform plan -out=tfplan
-
-      - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        working-directory: ./EKS-TF
-        run: terraform apply -auto-approve
-
-
-  deploy_k8s:
-    name: Deploy to EKS using kubectl
-    runs-on: ubuntu-latest
-    needs: terraform
-
-    env:
-      KUBECONFIG: ${{ secrets.KUBECONFIG }}
-
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
       - name: Setup kubectl
         uses: azure/setup-kubectl@v3
         with:
           version: 'latest'
 
+      # ✅ Write kubeconfig correctly
+      - name: Create kubeconfig file
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
+          chmod 600 $HOME/.kube/config
+
+      # ✅ Test connectivity (THIS IS THE KEY FIX)
+      - name: Verify EKS access
+        run: kubectl get nodes
+
+      # ✅ Deploy
       - name: Apply Kubernetes manifests
         run: |
           kubectl apply -f deployment.yaml
