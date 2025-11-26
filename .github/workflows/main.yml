@@ -1,1 +1,67 @@
+name: Infra CI/CD – Project-Super-Mario
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  terraform:
+    name: Terraform plan & apply
+    runs-on: ubuntu-latest
+    env:
+      AWS_DEFAULT_REGION: ap-south-1       # change region if needed
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: '1.6.0'         # choose version you use
+
+      - name: Terraform Init
+        working-directory: ./EKS-TF
+        run: terraform init
+
+      - name: Terraform Validate
+        working-directory: ./EKS-TF
+        run: terraform validate
+
+      - name: Terraform Format Check
+        working-directory: ./EKS-TF
+        run: terraform fmt -check
+
+      - name: Terraform Plan
+        working-directory: ./EKS-TF
+        run: terraform plan -out=tfplan
+
+      # Optional: auto-apply on push to main — you can also require manual approval
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        working-directory: ./EKS-TF
+        run: terraform apply -auto-approve
+
+  deploy_k8s:
+    name: Deploy to EKS using kubectl
+    runs-on: ubuntu-latest
+    needs: terraform
+    env:
+      KUBECONFIG: ${{ secrets.KUBECONFIG }}   # You must add kubeconfig as GitHub secret
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      - name: Apply Kubernetes manifests
+        run: |
+          kubectl apply -f deployment.yaml
+          kubectl apply -f service.yaml
 
