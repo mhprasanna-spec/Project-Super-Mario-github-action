@@ -99,6 +99,7 @@ click on actions → security → modify IAM role option
 ![role-ec2](./.Images/Modify_IAM_Role.png)
 ![modify-role](./.Images/Modify_IAM_Role2.png)
 ### $\color{red} \textbf {Step 5 → Building Infrastructure github action workflow on main.yaml
+<img width="828" height="272" alt="Screenshot 2025-11-26 at 5 04 09 PM" src="https://github.com/user-attachments/assets/7d53f254-8ec5-48f5-bd5f-940d84ccc556" />
 
 
 ## navigate to github action 
@@ -117,6 +118,11 @@ crreate workflow
 
 check for the code is running in github_action -->main.yaml 
 <img width="900" height="87" alt="Screenshot 2025-11-26 at 5 00 35 PM" src="https://github.com/user-attachments/assets/5d03f9fe-96cc-44c5-9d96-6dfc4704fff2" />
+<img width="1470" height="530" alt="Screenshot 2025-11-26 at 4 36 17 PM" src="https://github.com/user-attachments/assets/8925ac93-0a48-462a-b3a9-c85867bd0839" />
+
+<img width="1445" height="905" alt="Screenshot 2025-11-26 at 3 44 53 PM" src="https://github.com/user-attachments/assets/2d9bf202-60cd-4cd5-a1cf-c5ce2bb26534" />
+
+
 
 
 ## to destroy the workflow 
